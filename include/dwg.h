@@ -6613,6 +6613,7 @@ typedef struct _dwg_entity_eed
 typedef struct _dwg_object_entity
 {
   BITCODE_BL objid; /*!< link to the parent */
+  struct _dwg_struct *dwg;
   union
   {
     Dwg_Entity_UNUSED *UNUSED;
@@ -6694,7 +6695,6 @@ typedef struct _dwg_object_entity
     Dwg_Entity_UNKNOWN_ENT *UNKNOWN_ENT;
   } tio;
 
-  struct _dwg_struct *dwg;
   BITCODE_BL num_eed;
   Dwg_Eed *eed; /* see also Dwg_Resbuf* xdata */
 
@@ -6761,6 +6761,7 @@ typedef struct _dwg_object_entity
 typedef struct _dwg_object_object
 {
   BITCODE_BL objid; /*!< link to the parent */
+  struct _dwg_struct *dwg;
   union
   {
     Dwg_Object_BLOCK_CONTROL *BLOCK_CONTROL;
@@ -6911,7 +6912,6 @@ typedef struct _dwg_object_object
     Dwg_Object_UNKNOWN_OBJ *UNKNOWN_OBJ;
   } tio;
 
-  struct _dwg_struct *dwg;
   BITCODE_BL num_eed;
   Dwg_Eed *eed;
 
