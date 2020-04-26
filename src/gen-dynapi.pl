@@ -934,11 +934,11 @@ for (<DATA>) {
       }
       out_struct($tmpl, $1);
     } elsif ($tmpl =~ /^struct Dwg_(\w+)/) {
-      warn $tmpl;
-      if ($1 eq 'summaryinfo') {
-        print $doc "\n\@node SummaryInfo\n\@section SummaryInfo\n\@cindex SummaryInfo\n\n";
-        print $doc "All Section SummaryInfo fields.\n\n";
-      } else {
+      #if ($1 eq 'summaryinfo') {
+      #  print $doc "\n\@node SummaryInfo\n\@section SummaryInfo\n\@cindex SummaryInfo\n\n";
+      #  print $doc "All Section SummaryInfo fields.\n\n";
+      #} else
+      {
         print $doc "\@strong{$1}\n";
         print $doc "\@vindex $1\n\n";
       }
