@@ -1098,44 +1098,44 @@ api_common_entity (dwg_object *obj)
       pass ();                                                                \
   }
 
-#define CHK_SUBCLASS_TYPE(ptr, name, field, typ)                              \
+#define CHK_SUBCLASS_TYPE(strct, name, field, typ)                            \
   {                                                                           \
     BITCODE_##typ value;                                                      \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&strct, #name, #field, &value, NULL);    \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&strct, #name, #field, &value, NULL);  \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        if (ptr.field == value)                                               \
+        if (strct.field == value)                                             \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
             else                                                              \
-              ok (#name "." #field ":\t" FORMAT_##typ, ptr.field);            \
+              ok (#name "." #field ":\t" FORMAT_##typ, strct.field);          \
           }                                                                   \
         else                                                                  \
           fail (#name "." #field ":\t" FORMAT_##typ " [" #typ "]",            \
-                ptr.field);                                                   \
+                strct.field);                                                 \
       }                                                                       \
   }
-#define CHK_SUBCLASS_3RD(ptr, name, field)                                    \
+#define CHK_SUBCLASS_3RD(strct, name, field)                                  \
   {                                                                           \
     BITCODE_3RD value;                                                        \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&strct, #name, #field, &value, NULL);    \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&strct, #name, #field, &value, NULL);  \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        if (value.x == ptr.field.x && value.y == ptr.field.y                  \
-            && value.z == ptr.field.z)                                        \
+        if (value.x == strct.field.x && value.y == strct.field.y              \
+            && value.z == strct.field.z)                                      \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
@@ -1181,19 +1181,19 @@ api_common_entity (dwg_object *obj)
           }                                                                   \
       }                                                                       \
   }
-#define CHK_SUBCLASS_2RD(ptr, name, field)                                    \
+#define CHK_SUBCLASS_2RD(strct, name, field)                                  \
   {                                                                           \
     BITCODE_2RD value;                                                        \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&strct, #name, #field, &value, NULL);    \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&strct, #name, #field, &value, NULL);  \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
     else                                                                      \
       {                                                                       \
-        if (value.x == ptr.field.x && value.y == ptr.field.y)                 \
+        if (value.x == strct.field.x && value.y == strct.field.y)             \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
@@ -1204,14 +1204,14 @@ api_common_entity (dwg_object *obj)
           fail (#name "." #field ":\t(%f, %f)", value.x, value.y);            \
       }                                                                       \
   }
-#define CHK_SUBCLASS_H(ptr, name, field)                                      \
+#define CHK_SUBCLASS_H(strct, name, field)                                    \
   {                                                                           \
     BITCODE_H value;                                                          \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&strct, #name, #field, &value, NULL);    \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&strct, #name, #field, &value, NULL);  \
     if (!_ok)                                                                 \
       fail (#name "." #field);                                                \
     else                                                                      \
@@ -1220,7 +1220,7 @@ api_common_entity (dwg_object *obj)
             = value ? dwg_dynapi_handle_name (obj->parent, value) : NULL;     \
         if (!value)                                                           \
           {                                                                   \
-            if (!ptr.field)                                                   \
+            if (!strct.field)                                                 \
               {                                                               \
                 if (g_counter > g_countmax)                                   \
                   pass ();                                                    \
@@ -1230,7 +1230,7 @@ api_common_entity (dwg_object *obj)
             else                                                              \
               fail (#name "." #field ":\tNULL");                              \
           }                                                                   \
-        else if (memcmp (&ptr.field, &value, sizeof value) == 0)              \
+        else if (memcmp (&strct.field, &value, sizeof value) == 0)            \
           {                                                                   \
             if (g_counter > g_countmax)                                       \
               pass ();                                                        \
@@ -1298,14 +1298,14 @@ api_common_entity (dwg_object *obj)
           }                                                                   \
       }                                                                       \
   }
-#define CHK_SUBCLASS_UTF8TEXT(ptr, name, field)                               \
+#define CHK_SUBCLASS_UTF8TEXT(strct, name, field)                             \
   {                                                                           \
     BITCODE_TV value;                                                         \
     bool _ok;                                                                 \
     if (dwg_dynapi_entity_fields (#name))                                     \
-      _ok = dwg_dynapi_entity_value (&ptr, #name, #field, &value, NULL);      \
+      _ok = dwg_dynapi_entity_value (&strct, #name, #field, &value, NULL);    \
     else                                                                      \
-      _ok = dwg_dynapi_subclass_value (&ptr, #name, #field, &value, NULL);    \
+      _ok = dwg_dynapi_subclass_value (&strct, #name, #field, &value, NULL);  \
     if (_ok)                                                                  \
       {                                                                       \
         if (g_counter > g_countmax)                                           \
@@ -1321,19 +1321,19 @@ api_common_entity (dwg_object *obj)
           fail (#name "." #field);                                            \
       }                                                                       \
   }
-#define CHK_SUBCLASS_CMC(ptr, name, field)                                    \
-  if (!dwg_dynapi_subclass_value (&ptr, #name, #field, &ptr.field, NULL))     \
+#define CHK_SUBCLASS_CMC(strct, name, field)                                  \
+  if (!dwg_dynapi_subclass_value (&strct, #name, #field, &strct.field, NULL)) \
     fail (#name "." #field);                                                  \
   else                                                                        \
     {                                                                         \
       if (g_counter > g_countmax)                                             \
         pass ();                                                              \
       else                                                                    \
-        ok (#name "." #field ":\t%d", ptr.field.index);                       \
+        ok (#name "." #field ":\t%d", strct.field.index);                     \
     }
-#define CHK_SUBCLASS_MAX(ptr, name, field, type, _max)                        \
-  if (ptr.field > _max)                                                       \
-    fail ("Invalid " #name "." #field " " FORMAT_##type " > " #_max, ptr.field)
+#define CHK_SUBCLASS_MAX(strct, name, field, type, _max)                      \
+  if (strct.field > _max)                                                    \
+    fail ("Invalid " #name "." #field " " FORMAT_##type " > " #_max, strct.field)
 
 
 void

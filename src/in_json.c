@@ -2313,7 +2313,9 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                   if (f1)
                     {
                       // subclass offset for _obj
-                      void *off = &((char *)_obj)[f->offset + f1->offset];
+                      void *off = &((char *)_obj)[/* f->offset + */ f1->offset];
+                      LOG_INSANE ("subclass offset %u, %u of %u\n",
+                                  f->offset, f1->offset, dwg_dynapi_fields_size (subclass));
                       if (!_set_struct_field (dat, obj, tokens, off, subclass, key1, sfields))
                         ++tokens->index;
                     }
@@ -2324,7 +2326,7 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
                       f1 = dwg_dynapi_subclass_field (subclass, key1);
                       if (f1 && *rest)
                         {
-                          void *off = &((char *)_obj)[f->offset + f1->offset];
+                          void *off = &((char *)_obj)[/* f->offset + */ f1->offset];
                           char *subclass1 = dwg_dynapi_subclass_name (f1->type);
                           const Dwg_DYNAPI_field *sfields1
                             = subclass1 ? dwg_dynapi_subclass_fields (subclass1)
@@ -2491,69 +2493,6 @@ _set_struct_field (Bit_Chain *restrict dat, const Dwg_Object *restrict obj,
   return error;
 }
 
-/*
-// check both texts[] and itemhandles[]
-static void
-in_postprocess_DICTIONARY (Dwg_Object *obj)
-{
-  Dwg_Object_DICTIONARY *_obj = obj->tio.object->tio.DICTIONARY;
-  int do_free = 0;
-  if (_obj->numitems == (BITCODE_BL)-1)
-    {
-      _obj->numitems = 0;
-      do_free = 1;
-      LOG_ERROR ("reset DICTIONARY, no numitems");
-    }
-  if ((_obj->numitems || do_free) && !_obj->texts)
-    {
-      LOG_ERROR ("reset DICTIONARY, no texts");
-      // need to leave the handles, just free H*
-      free (_obj->itemhandles);
-      _obj->itemhandles = NULL;
-      _obj->numitems = 0;
-    }
-  if ((_obj->numitems || do_free) && !_obj->itemhandles)
-    {
-      LOG_ERROR ("reset DICTIONARY, no itemhandles");
-      for (BITCODE_BL i = 0; i < _obj->numitems; i++)
-        free (_obj->texts[i]);
-      free (_obj->texts);
-      _obj->texts = NULL;
-      _obj->numitems = 0;
-    }
-}
-// check both texts[] and itemhandles[]
-static void
-in_postprocess_DICTIONARYWDFLT (Dwg_Object *obj)
-{
-  Dwg_Object_DICTIONARYWDFLT *_obj = obj->tio.object->tio.DICTIONARYWDFLT;
-  int do_free = 0;
-  if (_obj->numitems == (BITCODE_BL)-1)
-    {
-      _obj->numitems = 0;
-      do_free = 1;
-      LOG_ERROR ("reset DICTIONARYWDFLT, no numitems");
-    }
-  if ((_obj->numitems || do_free) && !_obj->texts)
-    {
-      LOG_ERROR ("reset DICTIONARYWDFLT, no texts");
-      // need to leave the handles, just free H*
-      free (_obj->itemhandles);
-      _obj->itemhandles = NULL;
-      _obj->numitems = 0;
-    }
-  if ((_obj->numitems || do_free) && !_obj->itemhandles)
-    {
-      LOG_ERROR ("reset DICTIONARYWDFLT, no itemhandles");
-      for (BITCODE_BL i = 0; i < _obj->numitems; i++)
-        free (_obj->texts[i]);
-      free (_obj->texts);
-      _obj->texts = NULL;
-      _obj->numitems = 0;
-    }
-}
-*/
-
 static int
 json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
               jsmntokens_t *restrict tokens)
@@ -2628,16 +2567,6 @@ json_OBJECTS (Bit_Chain *restrict dat, Dwg_Data *restrict dwg,
             {
               in_postprocess_SEQEND (oldobj, 0, NULL);
             }
-          /*
-          else if (oldobj->fixedtype == DWG_TYPE_DICTIONARY)
-            {
-              in_postprocess_DICTIONARY (oldobj);
-            }
-          else if (oldobj->fixedtype == DWG_TYPE_DICTIONARYWDFLT)
-            {
-              in_postprocess_DICTIONARYWDFLT (oldobj);
-            }
-          */
         }
 
       memset (obj, 0, sizeof (Dwg_Object));
