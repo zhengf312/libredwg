@@ -1,1 +1,44 @@
 Interface to GNU LibreDWG, read and write DWG and DXF.
+
+CDwgDocument
+
+Methods:
+
+.Open (filename)
+.Save ([filename])
+.SaveAs (filename], [version])
+.Export filename, extension, [object]
+  extension being a String with:
+    .dxf, .eps, .svg, .sat, .bmp, .json, .geojson
+  object required for bmp, sat
+.Close
+
+.AddOBJECT (specific args)
+  for all supported entities and objects
+
+Constants:
+  R_12 - R_2018 i as version args for SaveAs
+
+Collections:
+
+Blocks
+Dictionaries
+DimStyles
+Groups
+Layers
+Linetypes
+ModelSpace
+PaperSpace
+PlotConfigurations
+RegisteredApplications
+TextStyles
+UCSs
+Viewports
+Views
+Header ??
+Info => SummaryInfo
+
+ModelSpace, PaperSpace and Block returning objects
+
+CDxfDocument:
+.Open (filename) => CDwgDocument
