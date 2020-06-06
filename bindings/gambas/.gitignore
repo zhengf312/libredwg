@@ -4,6 +4,7 @@
 /gb_common.h
 /m4
 /reconf
+/version.m4
 
 /INSTALL
 /Makefile
